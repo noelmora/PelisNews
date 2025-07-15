@@ -1,19 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1 class="text-2xl font-bold mb-4">{{ action }} Trailer</h1>
-<form method="post" class="space-y-4">
-  <div>
-    <label class="block font-medium">Título:</label>
-    <input type="text" name="titulo" value="{{ trailer.titulo if trailer else '' }}" required class="w-full px-3 py-2 border rounded">
+<h1 class="text-3xl font-bold mb-6">Próximos Tráilers</h1>
+<a href="{{ url_for('add') }}"
+   class="mb-4 inline-block bg-blue-600 text-white px-4 py-2 rounded">
+  Nuevo Tráiler
+</a>
+<div class="grid gap-6">
+  {% for tr in trailers %}
+  <div class="bg-white rounded shadow p-4">
+    <h2 class="text-xl font-semibold">{{ tr.titulo }}</h2>
+    {% if tr.fecha_estreno %}
+      <p class="text-gray-600">Estreno: {{ tr.fecha_estreno }}</p>
+    {% endif %}
+    <iframe
+      class="w-full h-48 my-2"
+      src="https://www.youtube.com/embed/{{ tr.youtube_url.split('v=')[-1] }}"
+      frameborder="0" allowfullscreen>
+    </iframe>
+    <div class="flex space-x-2">
+      <a href="{{ url_for('detail', id=tr.id) }}" class="text-blue-600">Ver</a>
+      <a href="{{ url_for('edit', id=tr.id) }}" class="text-yellow-500">Editar</a>
+      <form action="{{ url_for('delete', id=tr.id) }}" method="post">
+        <button type="submit" class="text-red-600">Eliminar</button>
+      </form>
+    </div>
   </div>
-  <div>
-    <label class="block font-medium">URL YouTube:</label>
-    <input type="url" name="youtube_url" value="{{ trailer.youtube_url if trailer else '' }}" required class="w-full px-3 py-2 border rounded">
-  </div>
-  <div>
-    <label class="block font-medium">Fecha de estreno:</label>
-    <input type="date" name="fecha_estreno" value="{{ trailer.fecha_estreno if trailer and trailer.fecha_estreno else '' }}" class="px-3 py-2 border rounded">
-  </div>
-  <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">{{ action }}</button>
-</form>
+  {% endfor %}
+</div>
 {% endblock %}
