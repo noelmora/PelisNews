@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">{{ trailer.titulo }}</h1>
+{% if trailer.fecha_estreno %}<p class="text-gray-600 mb-2">Estreno: {{ trailer.fecha_estreno }}</p>{% endif %}
+<iframe class="w-full h-64 mb-4" src="https://www.youtube.com/embed/{{ trailer.youtube_url.split('v=')[-1] }}" frameborder="0" allowfullscreen></iframe>
+<a href="{{ url_for('index') }}" class="text-blue-600">Volver</a>
+{% endblock %}
